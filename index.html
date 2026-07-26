@@ -44,6 +44,12 @@
     <div class="canvas-wrap">
       <canvas id="gameCanvas" width="480" height="640" aria-label="벽돌깨기 게임"></canvas>
     </div>
+    <!-- 모바일 기기에서 키보드 없이 사용할 수 있는 터치 조작 버튼 -->
+    <div class="touch-controls" aria-label="터치 조작">
+      <button type="button" data-touch-dir="left" aria-label="왼쪽 이동">◀</button>
+      <button type="button" data-touch-action="launch" aria-label="공 발사">발사</button>
+      <button type="button" data-touch-dir="right" aria-label="오른쪽 이동">▶</button>
+    </div>
 
     <!-- 게임 중 떨어지는 아이템의 기능을 미리 알려 주는 안내표 -->
     <section class="powerup-guide" aria-label="아이템 설명">

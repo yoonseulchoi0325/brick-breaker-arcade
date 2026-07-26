@@ -20,7 +20,10 @@ h1 { margin: 4px 0 0; font-size: clamp(1.6rem, 7vw, 2.25rem); letter-spacing: .1
 label { font-size: .75rem; color: #b8c8e8; display: flex; align-items: center; gap: 6px; }
 select { border: 1px solid #4b72a8; border-radius: 6px; padding: 5px 7px; background: #0c1730; color: #eafcff; font: inherit; }
 .canvas-wrap { display: inline-block; width: min(480px, 100%); max-width: 100%; flex: 0 0 auto; border: 2px solid #4ad8ee; border-radius: 10px; overflow: hidden; box-shadow: 0 0 18px #00d9ff88, 0 0 55px #613cff44; line-height: 0; }
-canvas { display: block; width: 100%; max-width: 480px; height: auto; cursor: crosshair; }
+canvas { display: block; width: 100%; max-width: 480px; height: auto; cursor: crosshair; touch-action: none; }
+.touch-controls { display: flex; gap: 8px; justify-content: center; margin-top: 8px; }
+.touch-controls button { min-width: 62px; min-height: 40px; border: 1px solid #57eaff; border-radius: 8px; background: #102b4dcc; color: #eafcff; font-size: 1rem; font-weight: bold; touch-action: manipulation; user-select: none; }
+.touch-controls button:active { background: #2c7da5; transform: translateY(1px); }
 footer { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; color: #a9b8d7; font-size: .72rem; }
 .powerup-guide { grid-column: 2; grid-row: 1; display: flex; justify-content: flex-start; align-items: flex-start; flex-direction: column; gap: 7px; margin: 0; padding: 10px; border: 1px solid #34517e; border-radius: 8px; background: #0a1329aa; color: #c8d8ef; font-size: .69rem; }
 .powerup-guide strong { color: #78efff; }
@@ -40,5 +43,6 @@ footer { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; mar
 .leaderboard li span:nth-child(2) { text-align: right; color: #73f4ff; font-weight: bold; }
 .leaderboard li span:last-child { text-align: right; color: #9cb3cb; font-size: .69rem; }
 /* 캔버스와 랭킹을 모두 보여 줄 공간이 부족하면 겹치지 않고 세로로 전환한다. */
-@media (max-width: 900px) { .game-stage { grid-template-columns: minmax(0, 480px); justify-items: center; } .powerup-guide, .ranking-panel { grid-column: 1; width: min(480px, 100%); } .powerup-guide { grid-row: 2; } .ranking-panel { grid-row: 3; } }
+@media (max-width: 900px) { .game-stage { grid-template-columns: minmax(0, 64%) minmax(0, 36%); gap: 8px; align-items: start; } .canvas-wrap { width: 100%; } .powerup-guide { grid-column: 2; grid-row: 1; width: 100%; font-size: .58rem; } .ranking-panel { grid-column: 2; grid-row: 2; width: 100%; padding: 8px; font-size: .68rem; } .ranking-panel h2 { font-size: .8rem; } .ranking-panel h3 { font-size: .62rem; } .leaderboard { grid-template-columns: 1fr 38px; gap: 3px; padding-left: 16px; font-size: .62rem; } .leaderboard li span:last-child { grid-column: 1 / -1; text-align: left; font-size: .55rem; } .touch-controls { grid-column: 1; grid-row: 2; width: 100%; } .touch-controls button { min-width: 0; flex: 1; } }
+@media (max-width: 520px) { body { padding: 8px; } .game-stage { grid-template-columns: minmax(0, 62%) minmax(0, 38%); gap: 5px; } .ranking-panel { min-height: 0; } .ranking-panel form { display: block; } #scoreForm input, #scoreForm button { width: 100%; margin-top: 4px; } }
 @media (max-width: 420px) { body { padding: 12px; } footer { font-size: .64rem; gap: 6px; } }

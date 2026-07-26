@@ -295,6 +295,11 @@ function loop(time) { const dt = Math.min(.033, (time - game.lastTime) / 1000 ||
 window.addEventListener("keydown", e => { if (["ArrowLeft", "ArrowRight", "Space", "Escape"].includes(e.code)) e.preventDefault(); game.keys[e.code] = true; if (e.code === "Space") { if (["start", "gameover", "win"].includes(game.state)) { newGame(); launch(); } else launch(); } if ((e.code === "KeyP" || e.code === "Escape") && game.state !== "start" && !["gameover", "win"].includes(game.state)) game.state = game.state === "paused" ? "playing" : "paused"; });
 window.addEventListener("keyup", e => { game.keys[e.code] = false; });
 canvas.addEventListener("mousemove", e => { const rect = canvas.getBoundingClientRect(), x = (e.clientX - rect.left) * CANVAS.width / rect.width; if (game.paddle) game.paddle.x = Math.max(0, Math.min(CANVAS.width - game.paddle.width, x - game.paddle.width / 2)); });
+// 터치 드래그로도 마우스와 같은 방식으로 패들을 부드럽게 움직인다.
+canvas.addEventListener("pointermove", e => {
+  if (e.pointerType !== "mouse") { const rect = canvas.getBoundingClientRect(), x = (e.clientX - rect.left) * CANVAS.width / rect.width; if (game.paddle) game.paddle.x = Math.max(0, Math.min(CANVAS.width - game.paddle.width, x - game.paddle.width / 2)); e.preventDefault(); }
+}, { passive: false });
+canvas.addEventListener("pointerdown", e => { if (e.pointerType !== "mouse") { e.preventDefault(); if (["start", "gameover", "win"].includes(game.state)) { newGame(); launch(); } else launch(); } }, { passive: false });
 canvas.addEventListener("click", event => {
   const rect = canvas.getBoundingClientRect();
   const x = (event.clientX - rect.left) * CANVAS.width / rect.width;
@@ -322,6 +327,14 @@ scoreForm.addEventListener("submit", async event => {
 });
 difficultySelect.addEventListener("change", () => { if (game.state === "start") game.difficulty = difficultySelect.value; });
 themeSelect.addEventListener("change", () => { game.theme = themeSelect.value; });
+// 화면 좌우 버튼은 누르고 있는 동안 키보드 입력과 동일하게 동작한다.
+document.querySelectorAll("[data-touch-dir]").forEach(button => {
+  const code = button.dataset.touchDir === "left" ? "ArrowLeft" : "ArrowRight";
+  const press = event => { event.preventDefault(); game.keys[code] = true; };
+  const release = event => { event.preventDefault(); game.keys[code] = false; };
+  button.addEventListener("pointerdown", press, { passive: false }); button.addEventListener("pointerup", release, { passive: false }); button.addEventListener("pointercancel", release, { passive: false }); button.addEventListener("pointerleave", release, { passive: false });
+});
+document.querySelector("[data-touch-action=launch]").addEventListener("click", () => { if (["start", "gameover", "win"].includes(game.state)) { newGame(); launch(); } else launch(); });
 
 // 랭킹은 항상 보이고, 이름은 게임 시작 전에만 정한다.
 scoreForm.addEventListener("submit", event => {
