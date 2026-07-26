@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>벽돌깨기 아케이드</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <header>
+      <p class="eyebrow">ARCADE // CANVAS EDITION</p>
+      <h1>벽돌깨기 아케이드</h1>
+    </header>
+
+    <!-- 게임 시작 전에도 난이도와 테마를 고를 수 있는 간단한 설정 영역 -->
+    <section class="settings" aria-label="게임 설정">
+      <label>난이도
+        <select id="difficulty">
+          <option value="easy">1 · EASY</option>
+          <option value="normal" selected>2 · NORMAL</option>
+          <option value="hard">3 · HARD</option>
+          <option value="insane">4 · INSANE</option>
+        </select>
+      </label>
+      <label>테마
+        <select id="theme">
+          <optgroup label="계절 테마">
+            <option value="spring">봄 · Blossom</option>
+            <option value="summer">여름 · Ocean</option>
+            <option value="autumn">가을 · Sunset</option>
+            <option value="winter">겨울 · Aurora</option>
+          </optgroup>
+          <optgroup label="색상 테마">
+            <option value="neon" selected>네온 · Cyber</option>
+            <option value="violet">보라 · Violet</option>
+            <option value="mono">모노 · Silver</option>
+          </optgroup>
+        </select>
+      </label>
+    </section>
+
+    <div class="game-stage">
+    <div class="canvas-wrap">
+      <canvas id="gameCanvas" width="480" height="640" aria-label="벽돌깨기 게임"></canvas>
+    </div>
+
+    <!-- 게임 중 떨어지는 아이템의 기능을 미리 알려 주는 안내표 -->
+    <section class="powerup-guide" aria-label="아이템 설명">
+      <strong>아이템 안내</strong>
+      <span title="패들이 커집니다">💊+ 패들 증가</span>
+      <span title="패들이 작아집니다">💊− 패들 감소 <em>(주의)</em></span>
+      <span title="공이 세 개로 늘어납니다">●●● 멀티볼</span>
+      <span title="공이 느려집니다">🐢 슬로우</span>
+      <span title="목숨이 하나 늘어납니다">♥ 목숨 +1</span>
+    </section>
+
+    <!-- 게임오버/승리 시에만 열리는 글로벌 랭킹 입력 및 조회 영역 -->
+    <section id="rankingPanel" class="ranking-panel" aria-live="polite">
+      <h2 id="resultTitle">결과 저장</h2>
+      <p id="resultScore"></p>
+      <form id="scoreForm">
+        <label for="playerName">플레이어 이름</label>
+        <input id="playerName" maxlength="12" required placeholder="최대 12자" autocomplete="nickname" />
+        <button type="submit">점수 저장</button>
+      </form>
+      <p id="rankingStatus" class="ranking-status">Firebase를 연결하면 전 세계 랭킹을 볼 수 있어요.</p>
+      <h3>GLOBAL TOP 10</h3>
+      <ol id="leaderboard" class="leaderboard"><li>랭킹을 불러오는 중…</li></ol>
+    </section>
+
+    </div>
+    <footer>
+      <span>← → / A D : 이동</span><span>SPACE : 발사·재시작</span><span>P / ESC : 일시정지</span>
+    </footer>
+  </main>
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

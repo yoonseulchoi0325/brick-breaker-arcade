@@ -1,0 +1,11 @@
+# 운영체제와 편집기 임시 파일
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+.vscode/
+
+# Firebase CLI가 생성하는 로컬 캐시/비공개 서비스 계정 키
+.firebase/
+firebase-debug.log
+*-firebase-adminsdk-*.json
