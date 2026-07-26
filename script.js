@@ -274,7 +274,7 @@ function drawMenuButton(y, text, color) {
 
 function drawOverlay() {
   let title = "", sub = "";
-  if (game.state === "start") { title = "벽돌깨기 아케이드"; sub = "SPACE바를 눌러 시작"; }
+  if (game.state === "start") { title = "벽돌깨기 아케이드"; sub = "먼저 테마와 난이도를 선택한 뒤, 화면을 터치하거나 드래그해서 시작하세요"; }
   else if (game.state === "paused") { title = "일시정지"; sub = "P 또는 ESC로 계속하기"; }
   else if (game.state === "gameover") { title = "GAME OVER"; sub = `최종 점수 ${game.score}  ·  SPACE바로 다시 시작`; }
   else if (game.state === "win") { title = "승리!"; sub = `점수 ${game.score}  ·  다음에는 무엇을 할까요?`; }
@@ -296,10 +296,23 @@ window.addEventListener("keydown", e => { if (["ArrowLeft", "ArrowRight", "Space
 window.addEventListener("keyup", e => { game.keys[e.code] = false; });
 canvas.addEventListener("mousemove", e => { const rect = canvas.getBoundingClientRect(), x = (e.clientX - rect.left) * CANVAS.width / rect.width; if (game.paddle) game.paddle.x = Math.max(0, Math.min(CANVAS.width - game.paddle.width, x - game.paddle.width / 2)); });
 // 터치 드래그로도 마우스와 같은 방식으로 패들을 부드럽게 움직인다.
-canvas.addEventListener("pointermove", e => {
-  if (e.pointerType !== "mouse") { const rect = canvas.getBoundingClientRect(), x = (e.clientX - rect.left) * CANVAS.width / rect.width; if (game.paddle) game.paddle.x = Math.max(0, Math.min(CANVAS.width - game.paddle.width, x - game.paddle.width / 2)); e.preventDefault(); }
+// 모바일에서는 손가락이 캔버스 밖으로 잠깐 나가도 입력이 끊기지 않도록 포인터를 캔버스에 고정한다.
+canvas.addEventListener("pointerdown", e => {
+  if (e.pointerType !== "mouse") {
+    e.preventDefault();
+    try { canvas.setPointerCapture(e.pointerId); } catch (_) { /* 일부 구형 브라우저는 미지원 */ }
+    if (["start", "gameover", "win"].includes(game.state)) { newGame(); launch(); } else launch();
+  }
 }, { passive: false });
-canvas.addEventListener("pointerdown", e => { if (e.pointerType !== "mouse") { e.preventDefault(); if (["start", "gameover", "win"].includes(game.state)) { newGame(); launch(); } else launch(); } }, { passive: false });
+canvas.addEventListener("pointermove", e => {
+  if (e.pointerType !== "mouse") {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * CANVAS.width / rect.width;
+    if (game.paddle) game.paddle.x = Math.max(0, Math.min(CANVAS.width - game.paddle.width, x - game.paddle.width / 2));
+    e.preventDefault();
+  }
+}, { passive: false });
+canvas.addEventListener("pointerup", e => { try { canvas.releasePointerCapture(e.pointerId); } catch (_) {} }, { passive: false });
 canvas.addEventListener("click", event => {
   const rect = canvas.getBoundingClientRect();
   const x = (event.clientX - rect.left) * CANVAS.width / rect.width;
